@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+/**
+ * Command shell sequence for Poco
+ */
 public class CommandShell {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
