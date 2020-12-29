@@ -1,97 +1,119 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Lex {
     private ArrayList<Token> tokens;
-    private String text;
-    private char current;
-    private int pos;
+    private ArrayList<String> lines;
 
     private final char ADD = '+';
     private final char SUB = '-';
     private final char MULT = '*';
     private final char DIV = '/';
+    private final char MOD = '%';
     private final char LEFTP = '(';
     private final char RIGHTP = ')';
-    private final char SPACE = ' ';
-    private final String NUM = "0123456789";
+    private final String DIGITS = "0123456789";
 
-    public Lex(String text) {
+    public Lex(String fileName) {
+        File file = new File(fileName);
+        lines = new ArrayList<>();
         tokens = new ArrayList<>();
-        this.text = text;
-        pos = -1;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                lines.add(currentLine);
+            }
+        } catch (IOException e) {
+            System.out.println("Provided file not found!");
+        }
     }
 
     public void compileTokens() {
-        StringBuilder sb = new StringBuilder();
-        int flush = 0;
+        for (String text : lines) {
+            String[] splitLine = text.split(" ");
 
-        while (true) {
-            if (!next()) flush = 1;
-            else sb.append(current);
-
-            if (current == SPACE) flush++;
-
-            if (flush == 1) {
-                String token = sb.toString().strip();
-
+            for (String token : splitLine) {
                 if (token.length() == 1) {
-                    switch (token.charAt(0)) {
+                    char tokenChar = token.charAt(0);
+
+                    switch (tokenChar) {
                         case ADD -> tokens.add(new Token(token, new Type("ADD")));
                         case SUB -> tokens.add(new Token(token, new Type("SUB")));
                         case MULT -> tokens.add(new Token(token, new Type("MULT")));
                         case DIV -> tokens.add(new Token(token, new Type("DIV")));
-                        case LEFTP -> tokens.add(new Token(token, new Type("LEFTP")));
-                        case RIGHTP -> tokens.add(new Token(token, new Type("RIGHTP")));
-                        default -> tokens.add(new Token(token, new Type("NUM")));
+                        case MOD -> tokens.add(new Token(token, new Type("MOD")));
+                        default -> {
+                            if (DIGITS.contains(token)) tokens.add(new Token(token, new Type("NUM")));
+                            else tokens.add(new Token(token, new Type("CHAR")));
+                        }
                     }
                 } else {
-                    if (token.charAt(0) == LEFTP) {
-                        while (token.charAt(0) == LEFTP) {
-                            tokens.add(new Token("(", new Type("LEFTP")));
+                    char currentChar = token.charAt(0);
+
+                    /* CHECK AND ADD ALL LEFT PARENTHESES */
+                    if (currentChar == LEFTP) {
+                        while ((currentChar = token.charAt(0)) == LEFTP) {
+                            tokens.add(new Token(String.valueOf(currentChar), new Type("LEFTP")));
                             token = token.substring(1);
                         }
-                        tokens.add(new Token(token, new Type("NUM")));
-                    } else if (token.charAt(token.length() - 1) == RIGHTP) {
-                        tokens.add(new Token(token.substring(0, token.indexOf(')')), new Type("NUM")));
-                        token = token.substring(token.indexOf(')'));
-                        for (int i = 0; i < token.length(); i++) {
-                            tokens.add(new Token(")", new Type("RIGHTP")));
+                    }
+
+                    /* CHECK AND ADD FOR KEYWORDS AND DATA TYPES */
+                    int tokenLength;
+                    StringBuilder tb = new StringBuilder();
+                    while ((tokenLength = token.length()) > 0 && (currentChar = token.charAt(0)) != RIGHTP) {
+                        tb.append(currentChar);
+                        token = token.substring(1);
+                    }
+
+                    //TODO: CHECK FOR KEYWORDS IN SWITCH OR IF/ELSEIF/ELSE HERE
+
+                    /* CHECK FOR DATA TYPES */
+                    String sectString = tb.toString();
+                    for (int i = 0; i < sectString.length(); i++) {
+                        char c = sectString.charAt(i);
+                        if (!DIGITS.contains(String.valueOf(c))) {
+                            tokens.add(new Token(sectString, new Type("STR")));
+                            break;
                         }
-                    } else {
-                        tokens.add(new Token(token, new Type("NUM")));
+
+                        if (i == sectString.length() - 1) {
+                            tokens.add(new Token(sectString, new Type("NUM")));
+                        }
+                    }
+
+                    while (token.length() > 0) {
+                        tokens.add(new Token(String.valueOf(token.charAt(0)), new Type("RIGHTP")));
+                        token = tb.substring(1);
                     }
                 }
-
-                sb = new StringBuilder();
-                flush = 0;
             }
-
-            if (pos >= text.length()) return;
         }
     }
 
-    public boolean next() {
-        pos++;
+    public void printTokens() {
+        System.out.print('{');
+        for (int i = 0; i < tokens.size(); i++) {
+            Token currentToken = tokens.get(i);
 
-        if (pos < text.length()) {
-            current = text.charAt(pos);
-            return true;
-        } else {
-            return false;
+            if (i < tokens.size() - 1) {
+                System.out.printf("%s:%s, ", currentToken.getType().getName(), currentToken.getValue());
+            } else {
+                System.out.printf("%s:%s", currentToken.getType().getName(), currentToken.getValue());
+            }
         }
+        System.out.println('}');
     }
 
     public static void main(String[] args) {
-        Lex test = new Lex("230 + ((2 - 3) + (52 - (3 * 4))");
+        Lex test = new Lex("first.poco");
+
         test.compileTokens();
-
-        System.out.print("{");
-        for (int i = 0; i < test.tokens.size(); i++) {
-            Token token = test.tokens.get(i);
-
-            if (i < test.tokens.size() - 1) System.out.printf("%s:%s, ", token.getType().getName(), token.getValue());
-            else System.out.printf("%s:%s", token.getType().getName(), token.getValue());
-        }
-        System.out.println("}");
+        test.printTokens();
     }
 }
