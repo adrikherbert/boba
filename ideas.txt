@@ -75,6 +75,16 @@ FUNCTIONS:
     make function say_this(str s) {
         print s
     }
+
+TRY CATCH:
+
+    Exceptions in Java --> Disasters in Poco
+
+    try {
+        block of code
+    } save <disaster> d {
+        do something
+    }
     
 COMMENTS:
 

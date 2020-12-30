@@ -19,10 +19,15 @@ public class Lex {
     private final char RIGHTB = ']';
     private final String DIGITS = "0123456789";
 
-    public Lex(String fileName) {
+    public Lex(String fileName) throws UnknownFileDisaster {
         File file = new File(fileName);
         lines = new ArrayList<>();
         tokens = new ArrayList<>();
+
+        String extension = fileName.split("\\.")[1];
+        if (!extension.equals("poco")) {
+            throw new UnknownFileDisaster(extension);
+        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String currentLine;
@@ -128,7 +133,14 @@ public class Lex {
     }
 
     public static void main(String[] args) {
-        Lex test = new Lex("first.poco");
+        Lex test = null;
+
+        try {
+            test = new Lex("first.poco");
+        } catch (UnknownFileDisaster e) {
+            System.out.println(e.getMessage());
+            return;
+        }
 
         test.compileTokens();
         test.printTokens();
