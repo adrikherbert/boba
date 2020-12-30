@@ -75,3 +75,15 @@ FUNCTIONS:
     make function say_this(str s) {
         print s
     }
+    
+COMMENTS:
+
+   startwith: ~ endwith: ~
+
+   ~ this is a comment ~
+
+   ~
+   this is a
+   multiline-
+   style comment
+   ~
