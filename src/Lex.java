@@ -15,6 +15,8 @@ public class Lex {
     private final char MOD = '%';
     private final char LEFTP = '(';
     private final char RIGHTP = ')';
+    private final char LEFTB = '[';
+    private final char RIGHTB = ']';
     private final String DIGITS = "0123456789";
 
     public Lex(String fileName) {
@@ -61,12 +63,17 @@ public class Lex {
                             tokens.add(new Token(String.valueOf(currentChar), new Type("LEFTP")));
                             token = token.substring(1);
                         }
+                    } else if (currentChar == LEFTB) {
+                        while ((currentChar = token.charAt(0)) == LEFTB) {
+                            tokens.add(new Token(String.valueOf(currentChar), new Type("LEFTB")));
+                            token = token.substring(1);
+                        }
                     }
 
                     /* CHECK AND ADD FOR KEYWORDS AND DATA TYPES */
                     int tokenLength;
                     StringBuilder tb = new StringBuilder();
-                    while ((tokenLength = token.length()) > 0 && (currentChar = token.charAt(0)) != RIGHTP) {
+                    while ((tokenLength = token.length()) > 0 && (currentChar = token.charAt(0)) != RIGHTP && currentChar != RIGHTB) {
                         tb.append(currentChar);
                         token = token.substring(1);
                     }
@@ -75,25 +82,35 @@ public class Lex {
 
                     /* CHECK FOR DATA TYPES */
                     String sectString = tb.toString();
-                    for (int i = 0; i < sectString.length(); i++) {
-                        char c = sectString.charAt(i);
-                        if (!DIGITS.contains(String.valueOf(c))) {
-                            tokens.add(new Token(sectString, new Type("STR")));
-                            break;
-                        }
-
-                        if (i == sectString.length() - 1) {
-                            tokens.add(new Token(sectString, new Type("NUM")));
-                        }
-                    }
+                    String type = evaluateType(sectString);
+                    tokens.add(new Token(sectString, new Type(type)));
 
                     while (token.length() > 0) {
-                        tokens.add(new Token(String.valueOf(token.charAt(0)), new Type("RIGHTP")));
+                        currentChar = token.charAt(0);
+
+                        if (currentChar == RIGHTP) tokens.add(new Token(String.valueOf(currentChar), new Type("RIGHTP")));
+                        else if (currentChar == RIGHTB) tokens.add(new Token(String.valueOf(currentChar), new Type("RIGHTB")));
                         token = tb.substring(1);
                     }
                 }
             }
         }
+    }
+
+    public String evaluateType(String token) {
+        for (int i = 0; i < token.length(); i++) {
+            char c = token.charAt(i);
+            if (!DIGITS.contains(String.valueOf(c))) {
+                if (token.charAt(0) == '"' && token.charAt(token.length() - 1) == '"') return "STR";
+                else return "KEY";
+            }
+
+            if (i == token.length() - 1) {
+                return "NUM";
+            }
+        }
+
+        return "VOID";
     }
 
     public void printTokens() {

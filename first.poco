@@ -1,1 +1,4 @@
-2 + (4 - (3 * (5 + 4)) - (4 + 8))
+make num i 10
+make str hello "hello"
+make list l [1 2 3]
+2 + (3 - [4 * 2))

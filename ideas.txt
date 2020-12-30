@@ -11,8 +11,7 @@ VARIABLES SYNTAX:
          make num i 10
          make str hello "hello" <- str defined by double quotes
          make char a 'a' <- char defined by single quotes
-         make list l [num 1, num 2, str "hello", char 'a'] <- dynamic list
-         make list l num[1, 2, 3] <- static list
+         make list l [1 2 3 "hello" 4 "goodbye"] <- dynamic list
 
     * `change [name] to [value]` to set a variable
         change i to 20
@@ -51,7 +50,7 @@ CONDITIONALS:
 LOOPS:
 
     simple for syntax: `for [variable] from [num] to [num]`
-    ***NOTE: [num] must be an integer &&
+    ***NOTE: [num] must be an integer
 
     SIMPLE FOR:
         make num x 0
