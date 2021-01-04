@@ -97,3 +97,10 @@ COMMENTS:
    multiline-
    style comment
    ~
+
+IDEAS FOR CREATING ABSTRACT SYNTAX TREE:
+
+    * Need a root module
+    * Parse steps into traversable syntax tree
+    * Parentheses denote branch creation
+    * Traversed left to right

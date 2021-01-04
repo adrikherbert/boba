@@ -56,7 +56,7 @@ public class Lex {
                         case MOD -> tokens.add(new Token(token, new Type("MOD")));
                         default -> {
                             if (DIGITS.contains(token)) tokens.add(new Token(token, new Type("NUM")));
-                            else tokens.add(new Token(token, new Type("CHAR")));
+                            else tokens.add(new Token(token, new Type("KEY")));
                         }
                     }
                 } else {
@@ -107,6 +107,7 @@ public class Lex {
             char c = token.charAt(i);
             if (!DIGITS.contains(String.valueOf(c))) {
                 if (token.charAt(0) == '"' && token.charAt(token.length() - 1) == '"') return "STR";
+                else if (token.charAt(0) == '\'' && token.charAt(token.length() - 1) == '\'') return "CHAR";
                 else return "KEY";
             }
 
