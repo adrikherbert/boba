@@ -8,11 +8,11 @@ public class CommandShell {
         Scanner scan = new Scanner(System.in);
 
         while (true) {
-            System.out.print("poco >> ");
+            System.out.print("boba >> ");
             String input = scan.nextLine();
 
             if (input.equals("exit")) break;
-            else if (input.substring(0, 5).equals("poco ")) {
+            else if (input.substring(0, 5).equals("boba ")) {
                 String fileName = input.substring(5);
                 Lex lexer = null;
 

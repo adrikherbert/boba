@@ -25,7 +25,7 @@ public class Lex {
         tokens = new ArrayList<>();
 
         String extension = fileName.split("\\.")[1];
-        if (!extension.equals("poco")) {
+        if (!extension.equals("boba")) {
             throw new UnknownFileDisaster(extension);
         }
 
@@ -137,7 +137,7 @@ public class Lex {
         Lex test = null;
 
         try {
-            test = new Lex("first.poco");
+            test = new Lex("first.boba");
         } catch (UnknownFileDisaster e) {
             System.out.println(e.getMessage());
             return;

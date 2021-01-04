@@ -3,7 +3,7 @@ public class UnknownFileDisaster extends Exception {
     private final String message;
 
     public UnknownFileDisaster(String extension) {
-        this.message = String.format("Unknown File Disaster! -->> Incorrect file extension!\nExpected: \".poco\"\nWas: \".%s\"", extension);
+        this.message = String.format("Unknown File Disaster! -->> Incorrect file extension!\nExpected: \".boba\"\nWas: \".%s\"", extension);
         this.extension = extension;
     }
 
