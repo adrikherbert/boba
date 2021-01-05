@@ -1,17 +1,17 @@
 DATA TYPES:
-    * str -> string
-    * char -> character
-    * num -> int and float
-    * bool -> boolean
+    * string -> string
+    * character -> character
+    * number -> int and float
+    * boolean -> boolean
     * list -> array/list
     * function -> treated as a data type
 
 VARIABLES SYNTAX:
     * `make` [type] [name] #[value] <- `#` means optional
-         make num i 10
-         make str hello "hello" <- str defined by double quotes
-         make char a 'a' <- char defined by single quotes
-         make list l [1 2 3 "hello" 4 "goodbye"] <- dynamic list
+         make number i 10
+         make string hello "hello" <- str defined by double quotes
+         make character a 'a' <- char defined by single quotes
+         make list l [1 2 3 4 5] <- single-type list
 
     * `change [name] to [value]` to set a variable
         change i to 20
@@ -19,7 +19,7 @@ VARIABLES SYNTAX:
         change list1 to list2
 
     * `[name]++ or [name]--` to inc/dec
-        make num i 10
+        make number i 10
         i++ <- (i = 11)
 
 CONDITIONALS:
@@ -35,16 +35,16 @@ CONDITIONALS:
         * xor (^)
 
     IF:
-        make num x 10
-        make num y 20
-        make num i
+        make number x 10
+        make number y 20
+        make number i
 
-        if x isn't y {
-            change i to 20
-        } elsif x is y {
-            change i to 30
+        if x is y {
+            do something
+        } orif x isn't y {
+            do something
         } else {
-            change i to 40
+            do something
         }
 
 LOOPS:
@@ -53,16 +53,19 @@ LOOPS:
     ***NOTE: [num] must be an integer
 
     SIMPLE FOR:
-        make num x 0
+
+        make number x 0
 
         for i from 1 to 10 {
-            x++
+            print x
+            increment x
         }
+
 
     LIST ITERATION:
         `for [variable] in [list]`
 
-        make num x 0
+        make number x 0
 
         for i in list {
             do something
@@ -72,7 +75,7 @@ FUNCTIONS:
 
     `make` keyword comes back
 
-    make function say_this(str s) {
+    make function say_this(string s) {
         print s
     }
 
@@ -104,3 +107,31 @@ IDEAS FOR CREATING ABSTRACT SYNTAX TREE:
     * Parse steps into traversable syntax tree
     * Parentheses denote branch creation
     * Traversed left to right
+
+
+SUMMARY:
+
+    make number x 10
+    make string hello "hello"
+    make character c 'c'
+    make list num_list [1 2 3 4 5]
+
+    make function print_me(string p) {
+        print p
+    }
+
+    if x is 1 {
+        do something
+    } orif (x is 2) {
+        do something
+    } else {
+        do something
+    }
+
+    for i from 1 to 10 {
+        print i
+    }
+
+    change x to 20
+
+    print x

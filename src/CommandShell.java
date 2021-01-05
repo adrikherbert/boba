@@ -23,8 +23,11 @@ public class CommandShell {
                     return;
                 }
 
-                lexer.compileTokens();
-                lexer.printTokens();
+                if (!lexer.compileTokens()) return;
+
+                Interpreter interpreter = new Interpreter(lexer);
+
+                interpreter.interpret();
             } else {
                 System.out.println("unknown command");
             }

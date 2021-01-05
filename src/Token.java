@@ -1,8 +1,8 @@
 public class Token {
     private final String value;
-    private final Type type;
+    private final String type;
 
-    public Token(String value, Type type) {
+    public Token(String value, String type) {
         this.value = value;
         this.type = type;
     }
@@ -11,7 +11,7 @@ public class Token {
         return value;
     }
 
-    public Type getType() {
+    public String getType() {
         return type;
     }
 }

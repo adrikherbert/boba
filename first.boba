@@ -1,5 +1,18 @@
-make num i 10
-make str hello "hello"
-make char h 'h'
-make list l [1 2 3]
-2 + (3 - [4 * 2))
+make number x 10
+make number y 5
+
+print x
+print y
+
+make string hello "hello"
+make string goodbye "goodbye"
+
+print hello
+print goodbye
+print "cya!"
+
+change x to 15
+change y to 10
+
+print x
+print y
